@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block page_body %}
+
+  <h2>{{ institution.name }}</h2>
+
+  <h4>Posts</h4>
+  <ul>
+    {% for post in institution.posts %}
+    <li>{{ post }}</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Membeships</h4>
+  <ul>
+    {% for membership in institution.memberships %}
+    <li>
+      <a href="{% url 'person-detail' id=membership.person_id.id %}">{{ membership.person_id.name }}</a>
+      {{ membership.role }}
+      {% if membership.area %}representing
+        <a href="{{ membership.area.identifier }}.html">{{ membership.area.name }}</a> {% endif %}
+      from {{ membership.start_date }}
+      {% if membership.end_date %}to {{ membership.end_date }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+
+  {{ person }}
+
+{% endblock %}

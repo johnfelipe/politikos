@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+  {{ block.super }}
+  <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css"/>
+  <style>
+  .dataTables_filter, .dataTables_length, .dataTables_paginate, .dataTables_info {
+    padding: 6px;
+  }
+  .representatives.dataTable {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+  }
+  </style>
+{% endblock %}
+
+{% block page_scripts %}
+  {{ block.super }}
+  <script src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+  <script>
+  $(document).ready(function() {
+    $('.representatives').each(function(){
+      $(this).DataTable();
+    });
+  } );
+  </script>
+{% endblock %}
+
+{% block page_body %}
+
+  {% if search %}
+    <div class="col-md-8 col-offset-md-2">
+      <hr/>
+
+      <p class="text-success"><b>Location found:</b> {{ location.address }}</p>
+      <p class="text-success"><b>Areas found:</b></p>
+      <ul class="text-success">
+        {% for area_id, area in areas %}
+          <li>{{ area.country_name }} &raquo; {{ area.name }} <small class="text-muted">[<abbr title="{{ area.type_name }}">{{ area.type }}</abbr>]</small></li>
+        {% empty %}
+          <li class="text-danger"><i>No areas found</i></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="row">
+      {% for organization, area, representatives in area_representatives %}
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">{{ organization.name }} &raquo; {{ area.name }} <small class="text-muted">[<abbr title="{{ area.type_name }}">{{ area.type }}</abbr>]</small></div>
+            <table class="table table-striped representatives" id="representatives-{{ organization.id }}-{{ area.id }}">
+              <thead>
+                <tr>
+                  <th>-</th>
+                  <th>Person</th>
+                  <th>Start date</th>
+                  <th>End date</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>-</th>
+                  <th>Person</th>
+                  <th>Start date</th>
+                  <th>End date</th>
+                </tr>
+              </tfoot>
+              <tbody>
+              {% for rep in representatives %}
+                <tr>
+                <td><figure class="img-circle">
+                  <img class="" src="{{ rep.person.image }}" height="40" alt="{{ rep.person.name }} Photo">
+                </figure></td>
+                <td><a href="{% url 'person-detail' id=rep.person.id %}">{{ rep.person.name }}</a></td>
+                <td>{{ rep.start_date }}</td>
+                <td>{{ rep.end_date|default_if_none:'-' }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endblock page_body %}
