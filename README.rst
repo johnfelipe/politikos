@@ -4,7 +4,8 @@ Politikós
 Development
 -----------
 
-::bash
+.. code:: bash
+
     $ mkvirtualenv politikos
     $ git clone git@github.com:openpolis/politikos.git
     $ cd politikos
