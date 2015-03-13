@@ -21,5 +21,5 @@ Settings
 * DEBUG (on|off)
 * SECRET_KEY (random string)
 * ALLOWED_HOSTS (comma separated values)
-* MAPIT_ENDPOIT (default http://mapit.openpolis.it/)
+* MAPIT_ENDPOINT (default http://mapit.openpolis.it/)
 * POPIT_INSTANCE (default parlamento)
