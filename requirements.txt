@@ -2,3 +2,4 @@ Django==1.7.5
 poplus-pci
 geopy==1.9.1
 django-environ==0.3.0
+django-extensions
