@@ -20,7 +20,7 @@ class RepresentativesSearchView(TemplateView):
             kwargs['areas'] = []
             if location:
 
-                endpoint = settings.MAPIT_ENDPOIT
+                endpoint = settings.MAPIT_ENDPOINT
                 mapit = Mapit(base_endpoint=endpoint)
                 popit = Popit(instance=settings.POPIT_INSTANCE)
 

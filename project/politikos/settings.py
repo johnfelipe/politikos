@@ -18,7 +18,7 @@ REPO_DIR = os.path.dirname(BASE_DIR)
 Env.read_env(os.path.normpath(os.path.join(REPO_DIR, 'config', '.env')))
 env = Env()
 
-MAPIT_ENDPOIT = env('MAPIT_ENDPOIT')
+MAPIT_ENDPOINT = env('MAPIT_ENDPOINT')
 POPIT_INSTANCE = env('POPIT_INSTANCE')
 
 # Quick-start development settings - unsuitable for production
