@@ -1,7 +1,10 @@
 from django.conf import settings
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
+from django.contrib import messages
 from geopy.geocoders import Nominatim
 from pci import Mapit, Popit
+import tortilla
 
 
 class RepresentativesSearchView(TemplateView):
@@ -13,8 +16,19 @@ class RepresentativesSearchView(TemplateView):
         if address:
             kwargs['search'] = address
 
-            geolocator = Nominatim()
-            location = geolocator.geocode(address)
+            # for some reason, Nominatim responds 403 to this requests
+            # geolocator = Nominatim()
+            # location = geolocator.geocode(address)
+
+            nominatim = tortilla.wrap('http://nominatim.openstreetmap.org')
+            try:
+                location = nominatim.search.get(
+                    address, params={'format': 'json'}
+                )[0]
+            except IndexError:
+                messages.warning(request, 'Location could not be found, try another one.')
+                return HttpResponseRedirect('/')
+
 
             kwargs['location'] = location
             kwargs['areas'] = []
@@ -26,7 +40,7 @@ class RepresentativesSearchView(TemplateView):
 
                 kwargs['area_representatives'] = []
 
-                for mapit_id, mapit_data in mapit.areas_overpoint(location.latitude, location.longitude).items():
+                for mapit_id, mapit_data in mapit.areas(point='{0},{1}'.format(location.lon, location.lat),srid='4326').get().items():
                     kwargs['areas'].append(
                         (mapit_id, mapit_data)
                     )
